@@ -1,0 +1,78 @@
+services:
+  # Existing services (redis, db, backend)
+  redis:
+    image: redis:alpine
+    container_name: x_tracker_redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-network
+    volumes:
+      - redis_data:/data
+
+  db:
+    image: postgres:15
+    container_name: x_tracker_postgres
+    environment:
+      POSTGRES_DB: x_tracker
+      POSTGRES_USER: x_tracker
+      POSTGRES_PASSWORD: x_tracker
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U x_tracker -d x_tracker"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - app-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: x_tracker_backend
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - app-network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/code
+      - static_volume:/code/static
+    restart: unless-stopped
+
+  # Add Frontend Service
+  frontend:
+    build: ./frontend
+    container_name: x_tracker_frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    volumes:
+      - ./frontend:/app  # Mount frontend code for development
+      - /app/node_modules  # Exclude node_modules from host
+    depends_on:
+      - backend  # Ensure backend is running first
+    environment:
+      - REACT_APP_API_URL=http://backend:8000  # Point to backend API
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+
+networks:
+  app-network:
+    driver: bridge

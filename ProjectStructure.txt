@@ -1,0 +1,166 @@
+x_tracker/
+├── backend/                        # Django backend application
+│   ├── apps/                       # Django apps (modular structure)
+│   │   └── tracker/                # Main app for tracking X accounts and posts
+│   │       ├── migrations/         # Database migrations (auto-generated)
+│   │       ├── __init__.py         # Marks this folder as a Python package
+│   │       ├── admin.py            # Django admin configurations
+│   │       ├── models.py           # Database models (e.g., XAccount, XPost)
+│   │       ├── serializers.py      # DRF serializers for API responses
+│   │       ├── tasks.py            # Celery tasks (e.g., fetch latest posts)
+│   │       ├── urls.py             # App-specific URL routing
+│   │       └── views.py            # API views and business logic
+│   ├── config/                     # Django project configuration
+│   │   ├── settings/
+│   │   │   ├── __init__.py         # Empty file to make directory a Python package
+│   │   │   ├── base.py             # Common settings
+│   │   │   ├── development.py      # Development-specific settings
+│   │   │   └── production.py       # Production-specific settings
+│   │   ├── __init__.py             # Marks this folder as a Python package
+│   │   ├── celery.py               # Celery configuration (ensure it imports Celery app)
+│   │   ├── settings.py             # Django settings (split into base/dev/prod if needed)
+│   │   ├── urls.py                 # Root URL configuration (include app URLs here)
+│   │   └── wsgi.py                 # WSGI configuration for production
+│   ├── Dockerfile                  # Dockerfile for backend (Python + Django)
+│   ├── entrypoint.sh               # Script to run migrations and start the server
+│   ├── manage.py                   # Django management script
+│   └── requirements.txt            # Python dependencies (split into base/dev/prod if needed)
+│
+├── frontend/                       # React frontend application
+│   ├── node_modules/               # Node.js dependencies (auto-generated via `npm install`)
+│   ├── public/                     # Static assets (e.g., index.html, favicon)
+│   ├── src/                        # React source code
+│   │   ├── App.css                 # Main CSS file for the app
+│   │   ├── App.js                  # Main React component
+│   │   ├── App.test.js             # Unit tests for App component
+│   │   ├── index.css               # Global CSS styles
+│   │   ├── index.js                # Entry point for React app
+│   │   ├── reportWebVitals.js      # Performance monitoring
+│   │   └── setupTests.js           # Test setup (e.g., Jest configuration)
+│   ├── .gitignore                  # Ignore node_modules and other files
+│   ├── Dockerfile                  # Dockerfile for frontend (Node.js + React)
+│   ├── package.json                # Node.js dependencies and scripts
+│   └── package-lock.json           # Lock file for Node.js dependencies
+│
+├── nginx/                          # Nginx configuration for reverse proxy
+│   ├── ssl/                        # SSL certificates (for HTTPS)
+│   │   ├── dhparam.pem             # Diffie-Hellman parameters
+│   │   ├── fullchain.pem           # SSL certificate chain
+│   │   └── privkey.pem             # Private key for SSL
+│   ├── dev.conf                    # Nginx config for development
+│   ├── Dockerfile                  # Custom Nginx image (optional)
+│   ├── entrypoint.sh               # Script to start Nginx
+│   ├── nginx.conf                  # Main Nginx configuration
+│   └── prod.conf                   # Nginx config for production
+│
+├── .env                            # Environment variables (DB credentials, secrets, etc.)
+├── docker-compose.override.yml     # Overrides for development (e.g., volume mounts)
+├── docker-compose.prod.yml         # Production-specific configuration
+├── docker-compose.yml              # Base Docker Compose configuration
+└── README.md                       # Project documentation
+
+
+The project is a Django + React + Celery app for tracking X posts.
+The current setup includes:
+Backend: Django 5.1.5
+Frontend: React 18.2.0
+Database: PostgreSQL
+Message Broker: Redis
+Task Queue: Celery
+The main goal is to track 5000+ X accounts and display their latest posts in real-time.
+Current challenges:
+Backend and Celery containers fail to start.
+Need to finalize the X API integration.
+
+
+
+
+docker-compose up --build
+docker-compose exec backend python manage.py createsuperuser
+
+Django admin: http://localhost:8000/admin
+React app: http://localhost:3000
+API endpoint: http://localhost:8000/api/x/latest/
+
+npm install
+docker-compose down -v && docker-compose up --build
+
+docker system prune -a --volumes
+
+===========================================================
+Next Steps:
+===========================================================
+Add X API authentication in tasks.py
+Implement efficient polling with Celery Beat
+Add pagination to the API
+Implement error handling in both Django and React
+Add loading states in the React UI
+Set up proper production settings (disable DEBUG, etc.)
+This setup provides a foundation where:
+Django handles data storage and API
+Celery manages background tasks for fetching posts
+React displays the latest posts
+Docker containers communicate through the compose network
+PostgreSQL is used for main data storage
+Redis handles Celery message brokering
+
+1. Core Features
+Track X Accounts:
+Add a feature to input and manage X account usernames.
+Implement bulk import for 5000+ accounts.
+
+Fetch Latest Posts:
+Use Celery to periodically fetch posts from tracked accounts.
+Store posts in the database with timestamps.
+
+Display Posts:
+Create a React page (domain.com/x/latest) to show the latest posts.
+Add filters (e.g., by account, date, or keyword).
+
+2. Advanced Features
+Real-Time Updates:
+Use WebSockets or Server-Sent Events (SSE) to push new posts to the frontend.
+
+Search and Filter:
+Add search functionality for posts (e.g., by content, hashtags).
+
+Analytics:
+Track post frequency, engagement metrics, and trends.
+
+Notifications:
+Send email or push notifications for new posts from specific accounts.
+
+3. Technical Improvements
+Optimize Performance:
+Use caching (Redis) for frequently accessed data.
+Implement pagination for the posts API.
+
+Error Handling:
+Add retry logic for Celery tasks.
+Handle API rate limits from X.
+
+Testing:
+Write unit tests for Django models and views.
+Add end-to-end tests for the React app.
+
+4. Deployment
+Production Setup:
+Configure DEBUG=False and add proper security settings.
+Use Gunicorn and Nginx for Django in production.
+
+CI/CD Pipeline:
+Set up GitHub Actions or GitLab CI for automated testing and deployment.
+
+Monitoring:
+Add logging and monitoring (e.g., Sentry, Prometheus).
+
+5. Documentation
+API Documentation:
+Use Swagger or Django REST Framework's built-in docs.
+
+User Guide:
+Write a guide for adding accounts and using the platform.
+
+Developer Guide:
+Document the setup process for new contributors.
+
