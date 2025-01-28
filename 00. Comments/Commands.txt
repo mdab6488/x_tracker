@@ -1,0 +1,10 @@
+Right now I have only the X_tracker folder. Now I went to create a project Using docker-compose.yml and DockerfileHow do I use the Python framework Django==5.1.5 React JS=19.0 docker 2.32.4 to make an X tracker? also, use any Django prebuild package that best matches this project. Imagine I have a list of 5000 x accounts that I want to see when they post in my website path domain.com/x/latest. Based on this? I want to get the latest post within a second if went to track a few thousand x accounts. give full A to Z details step by step I am a complete beginner. Give me the project file structure first the show how I do it please use comments in code and don't skip a single step
+
+
+Django admin: http://localhost:8000/admin
+React app: http://localhost:3000
+API endpoint: http://localhost:8000/api/x/latest/
+
+docker-compose build --no-cache
+
+docker-compose run backend python manage.py createsuperuser --no-cache

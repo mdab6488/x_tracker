@@ -1,30 +1,28 @@
-from django.test import TestCase
-from django.urls import reverse
-from rest_framework.test import APIClient
-from rest_framework import status
-from .models import XAccount
+from celery import shared_task
+from django.utils import timezone
+from .models import XAccount, XPost
+import requests
+import logging
 
-class LatestPostsViewTest(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        # Create a test XAccount for the tests
-        self.test_account = XAccount.objects.create(
-            username="test_user",
-            latest_post_id="12345"
-        )
+logger = logging.getLogger(__name__)
 
-    def test_latest_posts(self):
-        """
-        Test that the latest-posts endpoint returns a 200 status code.
-        """
-        response = self.client.get(reverse('latest-posts'))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_latest_posts_with_data(self):
-        """
-        Test that the latest-posts endpoint returns the correct data.
-        """
-        response = self.client.get(reverse('latest-posts'))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("latest_post_id", response.data)
-        self.assertEqual(response.data["latest_post_id"], self.test_account.latest_post_id)
+@shared_task
+def fetch_latest_posts():
+    """
+    Fetch latest posts from X accounts
+    This is a placeholder task - you'll need to implement the actual X API integration
+    """
+    accounts = XAccount.objects.filter(is_active=True)
+    
+    for account in accounts:
+        try:
+            # Here you would implement the actual X API call
+            # This is just a placeholder
+            logger.info(f"Fetching posts for {account.username}")
+            
+            # Update last checked timestamp
+            account.last_checked = timezone.now()
+            account.save()
+            
+        except Exception as e:
+            logger.error(f"Error fetching posts for {account.username}: {str(e)}")

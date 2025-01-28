@@ -1,0 +1,4 @@
+docker stop <container_id_or_name>
+docker rm <container_id_or_name>
+docker rmi x_trackerdeepseek-backend:latest
+docker rmi --force x_trackerdeepseek-backend:latest

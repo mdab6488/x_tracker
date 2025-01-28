@@ -1,0 +1,11 @@
+Python provides a module called compileall which you can use to compile or clear .pyc files:
+python -m compileall -b -q .
+
+The -b flag tells it to clear out old .pyc files, and -q makes it quiet (no output). The . at the end specifies the current directory.
+python -m compileall -x . -q
+
+Since Python 3.2, .pyc files are stored in __pycache__ directories:
+find . -name "__pycache__" -type d -exec rm -r {} +
+
+Pip Cache: For clearing pip's cache, which holds downloaded packages:
+pip cache purge

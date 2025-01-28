@@ -1,17 +1,17 @@
-# backend/Dockerfile
-FROM python:3.11
+FROM python:3.11-slim
 
-ENV PYTHONUNBUFFERED 1
+WORKDIR /app
 
-WORKDIR /code
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
 
+# Install Python dependencies
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy project
 COPY . .
-
-# Remove collectstatic from Dockerfile
-# This should be done after environment is fully configured
-
-# # Add these lines
-# RUN python manage.py collectstatic --noinput

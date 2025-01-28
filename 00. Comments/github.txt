@@ -14,3 +14,11 @@ git push -u origin main
 git remote add origin https://github.com/mdab6488/x_tracker.git
 git branch -M main
 git push -u origin main
+
+git add .
+git checkout --
+git commit -m "Pre testing commit"
+git push origin main
+
+git log
+git log --oneline
