@@ -8,3 +8,10 @@ API endpoint: http://localhost:8000/api/x/latest/
 docker-compose build --no-cache
 
 docker-compose run backend python manage.py createsuperuser --no-cache
+
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+
+python manage.py createsuperuser --username mdab6488 --email mdab6488@gmail.com
+
+alamin78601
+alamin786

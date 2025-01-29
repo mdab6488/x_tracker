@@ -2,7 +2,7 @@ x_tracker/
 ├── backend/                        # Django backend application
 │   ├── apps/                       # Django apps (modular structure)
 │   │   └── tracker/                # Main app for tracking X accounts and posts
-│   │       ├── migrations/         # Database migrations (auto-generated)
+│   │       ├── migrations/         # Database migrations (auto-generated) - Empty Folder
 │   │       ├── __init__.py         # Marks this folder as a Python package
 │   │       ├── admin.py            # Django admin configurations
 │   │       ├── models.py           # Database models (e.g., XAccount, XPost)
@@ -11,22 +11,20 @@ x_tracker/
 │   │       ├── urls.py             # App-specific URL routing
 │   │       └── views.py            # API views and business logic
 │   ├── config/                     # Django project configuration
-│   │   ├── settings/
-│   │   │   ├── __init__.py         # Empty file to make directory a Python package
-│   │   │   ├── base.py             # Common settings
-│   │   │   ├── development.py      # Development-specific settings
-│   │   │   └── production.py       # Production-specific settings
 │   │   ├── __init__.py             # Marks this folder as a Python package
 │   │   ├── celery.py               # Celery configuration (ensure it imports Celery app)
 │   │   ├── settings.py             # Django settings (split into base/dev/prod if needed)
 │   │   ├── urls.py                 # Root URL configuration (include app URLs here)
 │   │   └── wsgi.py                 # WSGI configuration for production
+│   ├── static/                     # - Empty Folder
+│   ├── venv/                       # Dockerfile for backend (Python + Django)
 │   ├── Dockerfile                  # Dockerfile for backend (Python + Django)
 │   ├── entrypoint.sh               # Script to run migrations and start the server
 │   ├── manage.py                   # Django management script
 │   └── requirements.txt            # Python dependencies (split into base/dev/prod if needed)
 │
 ├── frontend/                       # React frontend application
+│   ├── build/               # Node.js dependencies (auto-generated via `npm install`)
 │   ├── node_modules/               # Node.js dependencies (auto-generated via `npm install`)
 │   ├── public/                     # Static assets (e.g., index.html, favicon)
 │   ├── src/                        # React source code
@@ -41,6 +39,7 @@ x_tracker/
 │   ├── Dockerfile                  # Dockerfile for frontend (Node.js + React)
 │   ├── package.json                # Node.js dependencies and scripts
 │   └── package-lock.json           # Lock file for Node.js dependencies
+│   └── README.md                   # 
 │
 ├── nginx/                          # Nginx configuration for reverse proxy
 │   ├── ssl/                        # SSL certificates (for HTTPS)
@@ -53,17 +52,16 @@ x_tracker/
 │   ├── nginx.conf                  # Main Nginx configuration
 │   └── prod.conf                   # Nginx config for production
 │
+├── .babelrc                        # 
 ├── .env                            # Environment variables (DB credentials, secrets, etc.)
-├── docker-compose.override.yml     # Overrides for development (e.g., volume mounts)
-├── docker-compose.prod.yml         # Production-specific configuration
-├── docker-compose.yml              # Base Docker Compose configuration
+├── docker-compose.yml              # Docker Compose configuration
 └── README.md                       # Project documentation
 
 
 The project is a Django + React + Celery app for tracking X posts.
 The current setup includes:
-Backend: Django 5.1.5
-Frontend: React 18.2.0
+Backend: Django 
+Frontend: React 
 Database: PostgreSQL
 Message Broker: Redis
 Task Queue: Celery
@@ -74,35 +72,7 @@ Need to finalize the X API integration.
 
 
 
-
-docker-compose up --build
-docker-compose exec backend python manage.py createsuperuser
-
-Django admin: http://localhost:8000/admin
-React app: http://localhost:3000
-API endpoint: http://localhost:8000/api/x/latest/
-
-npm install
-docker-compose down -v && docker-compose up --build
-
-docker system prune -a --volumes
-
 ===========================================================
-Next Steps:
-===========================================================
-Add X API authentication in tasks.py
-Implement efficient polling with Celery Beat
-Add pagination to the API
-Implement error handling in both Django and React
-Add loading states in the React UI
-Set up proper production settings (disable DEBUG, etc.)
-This setup provides a foundation where:
-Django handles data storage and API
-Celery manages background tasks for fetching posts
-React displays the latest posts
-Docker containers communicate through the compose network
-PostgreSQL is used for main data storage
-Redis handles Celery message brokering
 
 1. Core Features
 Track X Accounts:

@@ -17,7 +17,7 @@ git push -u origin main
 
 git add .
 git checkout --
-git commit -m "Pre testing commit"
+git commit -m "Working 3000, 8000"
 git push origin main
 
 git log

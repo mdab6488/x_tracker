@@ -2,3 +2,31 @@ docker stop <container_id_or_name>
 docker rm <container_id_or_name>
 docker rmi x_trackerdeepseek-backend:latest
 docker rmi --force x_trackerdeepseek-backend:latest
+
+Before rebuilding, clean up existing containers:
+docker-compose down
+docker-compose down -v --remove-orphans
+docker system prune -f
+
+
+docker-compose up --build
+
+
+docker-compose up --build
+docker-compose exec backend python manage.py createsuperuser
+
+Django admin: http://localhost:8000/admin
+React app: http://localhost:3000
+API endpoint: http://localhost:8000/api/x/latest/
+
+npm install
+docker-compose down -v && docker-compose up --build
+
+docker system prune -a --volumes
+
+
+================================================
+docker-compose build
+docker-compose up -d
+docker-compose logs -f
+

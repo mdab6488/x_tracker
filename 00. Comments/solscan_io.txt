@@ -1,0 +1,26 @@
+====================================================
+API Access and Key Generation
+https://solscan.io/user/profile#api_management
+====================================================
+API Keys
+----------------------------------------------------
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkQXQiOjE3MzgxNjA3ODE0NDMsImVtYWlsIjoibWRhYmNyeXB0b3dvcmtAZ21haWwuY29tIiwiYWN0aW9uIjoidG9rZW4tYXBpIiwiYXBpVmVyc2lvbiI6InYyIiwiaWF0IjoxNzM4MTYwNzgxfQ.HnOuB-AnFfUJlVyvdcLqXYLhZFlKifxP677S22LJLGc
+
+====================================================
+pro-api.solscan.io
+https://pro-api.solscan.io/pro-api-docs/v2.0/reference/v2-account-transfer
+====================================================
+Understanding API Responses
+---------------------------
+Response Types: Most endpoints return JSON responses. Understand the structure:
+200 OK for successful requests.
+400 Bad Request, 401 Authentication failed, 429 Too Many Requests, or 500 Internal Server Error for various failure scenarios.
+Error Handling: Look into the documentation for specific error types and how to handle them in your application.
+
+
+
+
+
+
+
+

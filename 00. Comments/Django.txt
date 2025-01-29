@@ -1,0 +1,67 @@
+Stop any running containers (if needed)
+docker-compose down -v
+
+Build fresh images
+docker-compose build
+
+Start the containers in detached mode
+docker-compose up -d
+
+======================================================
+Run database migrations inside the Django container:
+======================================================
+docker-compose exec backend python manage.py migrate
+
+======================================================
+Then create a superuser for Django admin:
+======================================================
+docker-compose exec backend python manage.py createsuperuser
+
+
+======================================================
+Verify Services:
+======================================================
+docker-compose ps | grep backend
+docker-compose ps | grep frontend
+docker-compose ps | grep db
+docker-compose ps | grep redis
+docker-compose ps | grep celery
+
+If any service is not running, check its logs:
+docker-compose logs backend
+docker-compose logs celery
+
+======================================================
+Access the Links:
+======================================================
+Once all services are running, test the following URLs in your browser:
+
+Django Admin Panel:
+👉 http://localhost:8000/admin
+(Login using the superuser credentials)
+
+React App:
+👉 http://localhost:3000
+
+API Endpoint for X Posts:
+👉 http://localhost:8000/api/x/latest/
+
+======================================================
+Debug Any Issues:
+======================================================
+Container Logs: docker-compose logs <service-name>
+Port Conflicts: Ensure no other processes are using ports 8000, 3000, 5432, or 6379.
+Database Connectivity: Try connecting manually inside the container:
+docker-compose exec db psql -U postgres
+
+
+
+
+
+
+
+
+
+
+
+

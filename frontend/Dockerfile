@@ -1,23 +1,20 @@
-# Use Node.js 20 as the base image
-FROM node:20-alpine
+# Use Node.js image as base
+FROM node:18
 
-# Set working directory
+# Set working directory inside container
 WORKDIR /app
 
-# Copy package files
-COPY package.json package-lock.json ./
+# Copy package.json and package-lock.json to container
+COPY package.json package-lock.json /app/
 
 # Install dependencies
-RUN npm install --legacy-peer-deps
+RUN npm install
 
-# Copy the rest of the application code
-COPY . .
+# Copy all the files into the container
+COPY . /app/
 
-# Build the React app (for production)
-# RUN npm run build
-
-# Expose port 3000
+# Expose the port for React
 EXPOSE 3000
 
-# Start the development server
+# Run React app
 CMD ["npm", "start"]

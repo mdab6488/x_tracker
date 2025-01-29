@@ -1,24 +1,14 @@
-# backend/requirements.txt
-Django==5.1.5
-# djangorestframework==3.15.1  # Updated to work with Django 5
-# django-cors-headers==4.3.1
-# celery==5.3.6
-# redis==5.0.1
-# psycopg2-binary==2.9.9
-# python-dotenv==1.0.1
-# requests==2.31.0
-# django-celery-beat==2.6.0  # Updated version with Django 5 support
-# django-redis==5.4.0
-# dj-database-url==2.1.0
-
-
+Django
 djangorestframework
 django-cors-headers
+django-celery-beat
+django-environ
+django-redis
 celery
 redis
 psycopg2-binary
+python-decouple  # Replaces python-dotenv
 python-dotenv
+flask
 requests
-django-celery-beat
-django-redis
 dj-database-url

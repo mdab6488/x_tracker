@@ -12,7 +12,8 @@ function App() {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/posts/latest/`);
-        setPosts(response.data);
+        // Ensure posts is an array
+        setPosts(Array.isArray(response.data) ? response.data : []);
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch posts');
@@ -22,7 +23,6 @@ function App() {
     };
 
     fetchPosts();
-    // Refresh every 30 seconds
     const interval = setInterval(fetchPosts, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -40,7 +40,7 @@ function App() {
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="divide-y divide-gray-200">
-            {posts.map((post) => (
+            {Array.isArray(posts) && posts.map((post) => (
               <div key={post.id} className="py-4">
                 <div className="flex space-x-3">
                   <div className="flex-1 space-y-1">

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.css';  // Correct path for the CSS file
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -12,8 +12,3 @@ root.render(
 );
 
 reportWebVitals();
-
-# frontend/src/index.css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
