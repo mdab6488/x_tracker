@@ -70,8 +70,6 @@ Current challenges:
 Backend and Celery containers fail to start.
 Need to finalize the X API integration.
 
-
-
 ===========================================================
 
 1. Core Features

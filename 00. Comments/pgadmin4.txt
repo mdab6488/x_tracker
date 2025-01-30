@@ -1,0 +1,12 @@
+How to Use pgAdmin
+    Start your containers: docker-compose up -d
+    Access pgAdmin in your browser: http://localhost:5050
+Log in with:
+    Email: admin@admin.com (or the email you set in PGADMIN_DEFAULT_EMAIL)
+    Password: yourpassword (or the password you set in PGADMIN_DEFAULT_PASSWORD)
+Add a new server:
+    Host: db (the name of your PostgreSQL service in Docker)
+    Port: 5432
+    Username: youruser
+    Password: yourpassword
+    Database: yourdatabase

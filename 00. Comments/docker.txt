@@ -1,42 +1,71 @@
-docker stop <container_id_or_name>
-docker rm <container_id_or_name>
-docker rmi x_trackerdeepseek-backend:latest
-docker rmi --force x_trackerdeepseek-backend:latest
-
-Before rebuilding, clean up existing containers:
-docker-compose down
-docker-compose down -v --remove-orphans
-docker system prune -f
-
-
-docker-compose up --build
-
-
-docker-compose up --build
-docker-compose exec backend python manage.py createsuperuser
-
 Django admin: http://localhost:8000/admin
 React app: http://localhost:3000
 API endpoint: http://localhost:8000/api/x/latest/
+pgAdmin: http://localhost:5050
+
+Before rebuilding, clean up existing containers:
+docker-compose down
+docker-compose down -v
+docker system prune -f
+    Total reclaimed space: 6.616GB
+docker system prune -a --volumes
+    Total reclaimed space: 4.609GB
+
+docker stop <container_id_or_name>
+docker rm <container_id_or_name>
+docker rmi <container_id_or_name>
+
+docker-compose build
+docker-compose build --no-cache
+docker-compose build --progress=plain
+docker-compose up -d
+docker-compose up --force-recreate
 
 npm install
 docker-compose down -v && docker-compose up --build
 
-docker system prune -a --volumes
-
-docker-compose exec x_tracker_backend psql -U x_tracker_user -h db -d x_tracker_db
 
 ================================================
-docker-compose build
-docker-compose up -d
 docker-compose logs -f
-
 docker-compose logs db
+================================================
 
-docker-compose down -v && docker-compose up -d
+1. Rebuilding Your Image
+When to Use: If you've made changes to your application code, dependencies, or Dockerfile.
+Process: 
+    You don't usually need to remove the existing image; instead, you rebuild your Docker image using docker build . or via docker-compose build if you're using docker-compose.
+    Docker uses a caching mechanism, so only layers affected by changes will be rebuilt.
 
-docker-compose exec db psql -U x_tracker_user -d x_tracker_db
+2. Recreating Containers
+When to Use: After rebuilding your Docker image or if you've changed configurations in docker-compose.yml or environment variables.
+Process: 
+    Use docker-compose up --force-recreate to recreate containers from the updated images. This will stop the old containers and start new ones with the new image.
+    If you're using plain Docker commands without docker-compose, you might need to remove the old container (docker rm -f your_container_name) and then start a new one with docker run.
 
+3. Pruning Unused Images
+When to Use: If your Docker environment is cluttered with old images you no longer need.
+Process:
+    Use docker image prune to remove unused images. This won't remove images that are currently in use by containers.
+    For a more aggressive cleanup, docker system prune will remove stopped containers, unused networks, dangling images, and build cache.
 
-docker-compose exec backend python manage.py createsuperuser
-docker-compose exec backend python manage.py create_superuser
+4. Updating Volumes
+When to Use: If changes affect data or if you need to clear or reset data in your database or other persistent storage.
+Process: 
+    You might need to remove or rename volumes if you want to start fresh. Use docker volume rm volume_name or manage volumes through docker-compose down -v to remove volumes specified in your docker-compose.yml.
+
+5. Use of Docker Compose
+When to Use: For ongoing development where you're frequently updating the application.
+Process: 
+    docker-compose up --build will build your services and then start them. This is handy for development where you're frequently making changes.
+
+Considerations:
+    Networking: If you've changed network configurations, you might need to recreate networks or adjust them manually.
+    Service Dependencies: If your services depend on each other, ensure you handle the startup order correctly. docker-compose handles this for you, but with raw Docker commands, you might need to manage this manually.
+
+When to Remove Images:
+If you've significantly altered your Dockerfile and want to ensure no old layers are used, you might consider removing the old image first with docker rmi image_id before rebuilding.
+If you're clearing out old versions to save space or for a clean start, use the pruning commands.
+
+Best Practices:
+    Version Control: Use versioning in your images (e.g., myapp:v1, myapp:v2) to track changes and easily roll back if needed.
+    CI/CD: Implement a CI/CD pipeline where images are built, pushed to a registry, and then deployed or tested. This can manage image lifecycle better than manual interventions.

@@ -1,12 +1,14 @@
+# Define a reusable environment configuration
 x-env-config: &env-config
   env_file:
     - ${ENV_FILE:-.env}
 
 services:
+  # Database service configuration
   db:
-    image: postgres:15
+    image: postgres:17.2-alpine3.21
     container_name: x_tracker_db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}  # Remove default value
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}  # Remove default value
@@ -23,8 +25,26 @@ services:
       timeout: 5s
       retries: 5
 
+  pgadmin :
+    image: dpage/pgadmin4:latest
+    container_name: x_tracker_pgadmin
+    restart: always
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: ${PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION}
+    ports:
+      - "5050:80"
+    networks:
+      - my_network
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for DB to be ready
+
   redis:
-    image: redis:7
+    image: redis:latest
     container_name: x_tracker_redis
     restart: always
     command: redis-server /usr/local/etc/redis/redis.conf
@@ -46,7 +66,9 @@ services:
       retries: 5
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: x_tracker_backend
     volumes:
       - ./backend:/app
@@ -74,7 +96,9 @@ services:
       start_period: 30s  # Add warmup time
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: x_tracker_frontend
     env_file:  # Add this to load .env variables
       - .env
@@ -99,7 +123,9 @@ services:
       retries: 3
 
   celery_worker:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: x_tracker_celery_worker
     env_file:  # Add this to load .env variables
       - .env
@@ -123,7 +149,9 @@ services:
       start_period: 40s
 
   celery_beat:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: x_tracker_celery_beat
     env_file:  # Add this to load .env variables
       - .env
@@ -141,7 +169,21 @@ services:
     networks:
       - my_network
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
 
+  flower:
+    image: mher/flower
+    container_name: x-tracker-flower
+    command: ["flower", "--broker=redis://redis:6379/0", "--port=5555"]
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis                   # Wait for redis to be ready
+      - celery_worker           # Wait for celery_worker to be ready
 
   nginx:
     image: nginx:alpine
@@ -158,6 +200,8 @@ services:
     depends_on:
       backend:
         condition: service_healthy  # Wait for db to be ready
+      frontend:
+        condition: service_healthy  # Wait for db to be ready
     restart: unless-stopped
     networks:
       - my_network
@@ -172,3 +216,4 @@ volumes:
   postgres_data:
   static_volume:
   redis_data:
+  pgadmin_data:

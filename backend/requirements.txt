@@ -1,14 +1,24 @@
-Django
-djangorestframework
-django-cors-headers
-django-celery-beat
-django-environ
-django-redis
-celery
-redis
-psycopg2-binary
-python-decouple  # Replaces python-dotenv
-python-dotenv
-flask
-requests
-dj-database-url
+Django                          # Django: The web framework for building the backend of the application.
+djangorestframework             # djangorestframework: Adds REST API capabilities to Django.
+django-cors-headers             # django-cors-headers: Handles Cross-Origin Resource Sharing (CORS) for the backend.
+django-celery-beat              # django-celery-beat: Scheduler for periodic tasks with Celery in Django.
+django-redis                    # django-redis: Integrates Redis as the cache backend for Django.
+django-environ                  
+djangorestframework-simplejwt   # djangorestframework-simplejwt: JSON Web Token authentication for Django REST framework.
+django-debug-toolbar            # django-debug-toolbar: Provides a configurable set of panels to debug Django applications. Use only in local development. Don’t include it in production.
+django-storages                 # django-storages: Collection of custom storage backends for Django.
+django-celery-results           # django-celery-results: Celery result backends for Django.
+celery                          # celery: Asynchronous task queue/job queue based on distributed message passing.
+redis                           # redis: In-memory data structure store, used as a message broker by Celery.
+psycopg2-binary                 # psycopg2-binary: PostgreSQL database adapter for Python.
+python-decouple                 # Replaces python-dotenv & python-decouple: Manages settings and environment variables, replacing python-dotenv.
+python-dotenv                   # python-dotenv: Reads key-value pairs from a .env file and sets them as environment variables.
+requests                        # requests: Simplifies making HTTP requests in Python.
+dj-database-url                 # dj-database-url: Allows the use of a database URL to configure the database in Django.
+gunicorn                        # gunicorn: WSGI HTTP server for running the Django application.
+pillow                          # pillow: Python Imaging Library (PIL) fork, adds image processing capabilities.
+drf-yasg                        # drf-yasg: Generates real Swagger/OpenAPI 2.0 specifications from a Django Rest Framework API.
+whitenoise                      # whitenoise: Serves static files in a Django application.coverage                        # coverage: Measures code coverage of Python programs.
+tweepy                          # tweepy: Twitter API wrapper for Python.
+httpx                           # httpx: HTTP client for Python.
+flower                          # flower: Real-time monitor and web admin for Celery.

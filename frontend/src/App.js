@@ -10,22 +10,27 @@ function App() {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      const apiUrl = process.env.REACT_APP_API_URL
+        ? `${process.env.REACT_APP_API_URL}/api/posts/latest/`
+        : "http://localhost:8000/api/posts/latest/";
+  
+      console.log("Fetching from:", apiUrl); // Debugging Log
+  
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/posts/latest/`);
-        // Ensure posts is an array
+        const response = await axios.get(apiUrl);
         setPosts(Array.isArray(response.data) ? response.data : []);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch posts');
+        setError("Failed to fetch posts");
         setLoading(false);
-        console.error('Error fetching posts:', err);
+        console.error("Error fetching posts:", err.message);
       }
     };
-
+  
     fetchPosts();
     const interval = setInterval(fetchPosts, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, []);  
 
   if (loading) return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   if (error) return <div className="text-red-500 text-center p-4">{error}</div>;

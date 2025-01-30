@@ -10,7 +10,7 @@ done
 echo "PostgreSQL started"
 
 # Apply database migrations
-python manage.py migrate
+python manage.py migrate --noinput
 
 # Create default superuser
 python manage.py shell -c "

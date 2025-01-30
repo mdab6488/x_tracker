@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_celery_beat',
+    'django_celery_results',
     'apps.tracker',
 ]
 
@@ -114,10 +115,15 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 # CORS settings
+MIDDLEWARE.insert(1, "corsheaders.middleware.CorsMiddleware")
 CORS_ALLOW_ALL_ORIGINS = True if ENVIRONMENT == 'development' else False
 if ENVIRONMENT == 'production':
     CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000', 
                                 cast=lambda v: [s.strip() for s in v.split(',')])
+
+
+
+
 
 # REST Framework settings
 REST_FRAMEWORK = {

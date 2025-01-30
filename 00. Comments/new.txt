@@ -18,3 +18,36 @@ graph TD
 
 
 
+How to recreate the venv/ folder:
+Delete venv/: Simply delete the folder as you planned.
+
+Create a new virtual environment: In your project root (outside of Docker), run the following command to create a new venv/ folder:
+
+bash
+Copy
+Edit
+python3 -m venv venv
+Activate the virtual environment:
+
+On Linux/macOS:
+bash
+Copy
+Edit
+source venv/bin/activate
+On Windows:
+bash
+Copy
+Edit
+.\venv\Scripts\activate
+Install dependencies: After activating the virtual environment, install all dependencies from requirements.txt:
+
+bash
+Copy
+Edit
+pip install -r requirements.txt
+Start your development: With the virtual environment activated, you can start your Django development server:
+
+bash
+Copy
+Edit
+python manage.py runserver
