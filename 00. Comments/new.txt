@@ -1,0 +1,20 @@
+Port Mapping Recommendations:
+
+Service	Keep Port Mapping?	Why?
+PostgreSQL	❌ No	Your Django backend and Celery connect via Docker's internal network (my_network).
+Redis	❌ No	Celery and Django communicate with Redis internally via the Docker network.
+Backend	✅ Yes (8000)	Needed for development access to Django REST API.
+Frontend	✅ Yes (3000)	Needed to access the React app during development.
+Nginx	✅ Yes (80/443)	Required to expose the app to users in production.
+
+graph TD
+    A[React Frontend] -->|HTTP| B[Nginx]
+    B -->|Reverse Proxy| C[Django Backend]
+    C -->|ORM| D[PostgreSQL]
+    C -->|Tasks| E[Redis]
+    E -->|Broker| F[Celery Worker]
+    F -->|Poll| G[X API]
+    F -->|Store Data| D
+
+
+

@@ -24,9 +24,19 @@ docker-compose down -v && docker-compose up --build
 
 docker system prune -a --volumes
 
+docker-compose exec x_tracker_backend psql -U x_tracker_user -h db -d x_tracker_db
 
 ================================================
 docker-compose build
 docker-compose up -d
 docker-compose logs -f
 
+docker-compose logs db
+
+docker-compose down -v && docker-compose up -d
+
+docker-compose exec db psql -U x_tracker_user -d x_tracker_db
+
+
+docker-compose exec backend python manage.py createsuperuser
+docker-compose exec backend python manage.py create_superuser
